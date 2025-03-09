@@ -2,6 +2,8 @@
 from pathlib import Path
 from dotenv import load_dotenv
 from os import path, getenv
+
+from loguru import logger
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
@@ -84,8 +86,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': getenv("POSTGRES_DB"),
+        'USER': getenv("POSTGRES_USER"),
+        'HOST': getenv("POSTGRES_HOST"),
+        'PORT': getenv("POSTGRES_PORT"),
+        'PASSWORD': getenv("POSTGRES_PASSWORD")
+
     }
 }
 
@@ -143,3 +150,44 @@ STATIC_ROOT = str(BASE_DIR / "staticfiles")
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# diabling djangos default logging and avoid conflict with loguru
+LOGGING_CONFIG = None
+
+LOGURU_LOGGING = {
+    "handlers": [
+        {
+            "sink": BASE_DIR / "logs/debug.log",
+            "level": "DEBUG",  # sucess, debug, warning
+            # log will include warning debugs excluding errors and critical logs
+            "filter": lambda record: record["level"].no <= logger.level("WARNING").no,
+            "format": "{time:YYYY=MM-DD HH:mm:ss.sss} | {level: <8 | {name}:{function}:{line} - {message}}",
+            "rotation": "10MB",
+            "retention": "30 days",
+            "compression": "zip"
+        },
+        {
+            "sink": BASE_DIR / "logs/error.log",
+            "level": "Error",  # sucess, debug, warning
+            "format": "{time:YYYY=MM-DD HH:mm:ss.sss} | {level: <8 | {name}:{function}:{line} - {message}}",
+            "rotation": "10MB",
+            "retention": "30 days",
+            "compression": "zip",
+            "backtrace": True,
+            "diagnose": True
+        },
+
+
+    ],   # handlers are responsible for dispatching log messages to appropriate destination
+}
+
+
+logger.configure(**LOGURU_LOGGING)
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"loguru": {"class": "interceptor.InterceptHandler"}},
+    "root": {"HANDLERS": ["loguru"], "level": "DEBUG"},
+}
