@@ -1,6 +1,6 @@
 from os import path, getenv
 from dotenv import load_dotenv
-from .base import *  # noqa -> tells linter to ignore this line
+from .base import *
 from .base import BASE_DIR
 
 
