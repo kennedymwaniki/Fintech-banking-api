@@ -4,6 +4,7 @@
 .idea
 .DS_Store
 staticfiles/
+.envs/
 !.envs/.env.example
 ### Python ###
 # Byte-compiled / optimized / DLL files
