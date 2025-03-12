@@ -11,6 +11,7 @@ RUN apt-get update && install --no-instal-recommends -y \
    libpq-dev
 
 
+#    copy everything from host machine to container (requirements forlders)
 COPY ./requirements .
 RUN pip wheel --wheel-dir  /usr/src/app/wheels \
     -r ${BUILD_ENVIRONMENT}.txt
@@ -22,6 +23,8 @@ ARG BUILD_ENVIRONMENT=local
 
 ARG APP_HOME=/app
 
+
+# tell python not to write binary files when importing modules (.pyc files) for resource saving space usage
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \    
     BUILD_ENVIRONMENT=${BUILD_ENVIRONMENT}
@@ -32,7 +35,8 @@ WORKDIR ${APP_HOME}
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     sudo git bash-completion nano ssh \
-    libpq-dev gettext \
+    libpq-dev gettext \ 
+    # this treats recommended packeges as not inmportant
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
