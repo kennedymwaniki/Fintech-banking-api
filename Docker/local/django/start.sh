@@ -1,10 +1,10 @@
 #!/bin/bash
 
-set -o errexit  # stops script if there is an error
+set -o errexit
 
 set -o pipefail
 
-set -o nounset #ensures that uninitialized variables are not used
+set -o nounset
 
 python manage.py migrate --no-input
 python manage.py collectstatic --no-input

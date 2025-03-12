@@ -66,4 +66,4 @@ RUN sed -i 's/\r$//g' /entrypoint.sh  /start.sh && \
 COPY --chown=django:django . ${APP_HOME}
 USER django
 # specifies default execution file when docker is started
-ENTRYPOINT [ "/executable.sh" ]
+ENTRYPOINT [ "/entrypoint.sh" ]
