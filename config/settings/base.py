@@ -1,4 +1,3 @@
-
 from pathlib import Path
 from dotenv import load_dotenv
 from os import path, getenv
@@ -158,7 +157,7 @@ LOGURU_LOGGING = {
     "handlers": [
         {
             "sink": BASE_DIR / "logs/debug.log",
-            "level": "DEBUG",  # sucess, debug, warning
+            "level": "DEBUG",  # success, debug, warning
             # log will include warning debugs excluding errors and critical logs
             "filter": lambda record: record["level"].no <= logger.level("WARNING").no,
             "format": "{time:YYYY=MM-DD HH:mm:ss.sss} | {level: <8 | {name}:{function}:{line} - {message}}",
@@ -168,7 +167,7 @@ LOGURU_LOGGING = {
         },
         {
             "sink": BASE_DIR / "logs/error.log",
-            "level": "Error",  # sucess, debug, warning
+            "level": "ERROR",  # Changed from "Error" to "ERROR"
             "format": "{time:YYYY=MM-DD HH:mm:ss.sss} | {level: <8 | {name}:{function}:{line} - {message}}",
             "rotation": "10MB",
             "retention": "30 days",
@@ -176,9 +175,7 @@ LOGURU_LOGGING = {
             "backtrace": True,
             "diagnose": True
         },
-
-
-    ],   # handlers are responsible for dispatching log messages to appropriate destination
+    ],
 }
 
 

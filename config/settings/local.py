@@ -18,7 +18,7 @@ DEBUG = getenv("DEBUG")
 
 SITE_NAME = getenv("SITE_NAME")
 
-ALLOWED_HOSTS = ["localshost", "127.0.0.1", "0.0.0.0"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 # 0.0.0.0 -> tells server to listen for all available  ipv4 ports on the machine
 
 
