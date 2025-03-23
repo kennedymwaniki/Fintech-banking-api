@@ -174,7 +174,7 @@ LOGURU_LOGGING = {
         {
             "sink": BASE_DIR / "logs/error.log",
             "level": "ERROR",  # Changed from "Error" to "ERROR"
-            "format": "{time:YYYY=MM-DD HH:mm:ss.sss} | {level: <8 | {name}:{function}:{line} - {message}}",
+            "format": "{time:YYYY-MM-DD HH:mm:ss.sss} | {level: <8 | {name}:{function}:{line} - {message}}",
             "rotation": "10MB",
             "retention": "30 days",
             "compression": "zip",
