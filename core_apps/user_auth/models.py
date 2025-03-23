@@ -66,6 +66,7 @@ class User(AbstractUser):
     otp = models.CharField(_('OTP'), max_length=6, blank=True)
     otp_expiry_time = models.DateTimeField(
         _("OTP Expiry Time"), null=True, blank=True)
+    # it reps the default user manager, we override the default one and use our custom manager
     objects = UserManager()
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = [
@@ -82,7 +83,7 @@ class User(AbstractUser):
         self.save()
 
     def verify_otp(self, otp: str) -> bool:
-        # check if otp is correct and has not expired
+        # check if otp is correct and has not expired, if it has not expired use it and clear it
         if self.otp == otp and self.otp_expiry_time > timezone.now():
             # once used it is cleared
             self.otp = ""
@@ -90,3 +91,52 @@ class User(AbstractUser):
             self.save()
             return True
         return False
+
+    def handle_failed_login_attempts(self) -> None:
+        self.failed_login_attempts += 1
+        self.last_failed_login = timezone.now()
+        if self.failed_login_attempts >= settings.LOGIN_ATTEMPTS:
+            self.account_status == self.AccountStatus.Locked
+            self.save()
+            send_account_locked_email(self)
+        self.save()
+
+    def reset_failed_login_attempts(self) -> None:
+        self.failed_login_attempts = 0
+        self.last_failed_login = None
+        self.account_status = self.AccountStatus.ACTIVE
+        self.save()
+
+    def unloc_account(self) -> None:
+        if self.account.status == self.AccountStatus.LOCKED:
+            self.account_status = self.AccountStatus.ACTIVE
+            self.failed_login_attempts = 0
+            self.last_failed_login = None
+            self.save()
+
+    @property
+    def is_locked(self):
+        if self.account.status == self.AccountStatus.LOCKED:
+            if (self.last_failed_login and (timezone.now() - self.last_failed_login) > settings.LOCKOUT_DURATION):
+                self.unlock_account()
+                return False
+            return True
+
+        return False
+
+    @property
+    def full_name(self) -> str:
+        full_name = f"{self.first_name} {self.last_name}"
+        return full_name.title().strip()
+
+    class Meta:
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
+        # oder by date joined, date_joined is obtained from the AbstractUser class
+        ordering = ["-date_joined"]
+
+    def has_role(self, role_name: str) -> bool:
+        return hasattr(self, "role") and self.role == role_name
+
+    def __str__(self) -> str:
+        return f"{self.full_name} - {self.get_role_display()}"

@@ -1,4 +1,4 @@
-# Django Bank
+# NextGen Django Bank API
 
 ## System Architecture
 

@@ -151,6 +151,10 @@ STATIC_ROOT = str(BASE_DIR / "staticfiles")
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# location of auth model for our users
+
+AUTH_USER_MODEL = "user_auth.User"
+
 
 # diabling djangos default logging and avoid conflict with loguru
 LOGGING_CONFIG = None
