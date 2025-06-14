@@ -48,8 +48,8 @@ COPY --chown=django:django ./docker/local/django/celery/beat/start.sh /start-cel
 COPY --chown=django:django ./docker/local/django/celery/flower/start.sh /start-celeryflower.sh
 
 RUN sed -i 's/\r$//g' /entrypoint.sh /start.sh /start-celeryworker.sh /start-celerybeat.sh \
-    /start-flower.sh && \
-    chmod +x /entrypoint.sh /start.sh /start-celeryworker.sh /start-celerybeat.sh /start-flower.sh
+    /start-celeryflower.sh && \
+    chmod +x /entrypoint.sh /start.sh /start-celeryworker.sh /start-celerybeat.sh /start-celeryflower.sh
 
 COPY --chown=django:django . ${APP_HOME}
 
