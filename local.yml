@@ -27,7 +27,7 @@ services:
     networks:
       - banker_local_nw
 
-  cleryworker:
+  celeryworker:
     <<: *api
     command: /start-celeryworker.sh
 
@@ -37,13 +37,13 @@ services:
       - "5555:5555"
     volumes:
       - flower_db:/app/flower_db
-    command: /start-flower.sh
+    command: /start-celeryflower.sh
 
   celerybeat:
     build:
       context: .
       dockerfile: ./docker/local/django/Dockerfile
-    commnd: /start-celerybeat.sh
+    command: /start-celerybeat.sh
     env_file:
       - .envs/.env.local
     depends_on:
