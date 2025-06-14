@@ -34,5 +34,5 @@ network-inspect:
 banker-db:
 	docker compose -f local.yml exec postgres psql --username=kennedymwaniki --dbname=banker
 
-# network-create:
-#     docker network create banker_local_nw 
+network-create:
+    docker network create banker_local_nw 

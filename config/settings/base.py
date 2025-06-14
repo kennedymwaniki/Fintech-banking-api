@@ -170,6 +170,31 @@ SPECTACULAR_SETTINGS = {
     },
 }
 
+
+# celery settings
+
+if USE_TZ:
+    CELERY_TIMEZONE = TIME_ZONE
+
+
+# specify url that redis broker is running on(sending and receiving messages)
+CELERY_BROKER_URL = getenv("CELERY_BROKER_URL")
+
+# celery to store task results in redis
+CELERY_RESULT_BACKEND = getenv("CELERY_RESULT_BACKEND")
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_RESULT_BACKEND_MAX_RETRIES = 10
+CELERY_TASK_SEND_SENT_EVENT = True
+CELERY_RESULT_EXTENDED = True
+CELERY_RESULT_BACKEND_ALWAYS_RETRY = True
+CELERY_TASK_TIME = 5 * 60
+CELERY_TASK_SOFT_TIME_LIMIT = 60
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+CELERY_WORKER_SEND_TASK_EVENT = True
+
+
 # diabling djangos default logging and avoid conflict with loguru
 LOGGING_CONFIG = None
 
