@@ -26,7 +26,7 @@ WORKDIR ${APP_HOME}
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     sudo git bash-completion nano ssh \
-    libpq-dev gettext \
+    libpq-dev gettext dos2unix \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
@@ -47,8 +47,8 @@ COPY --chown=django:django ./docker/local/django/celery/worker/start.sh /start-c
 COPY --chown=django:django ./docker/local/django/celery/beat/start.sh /start-celerybeat.sh
 COPY --chown=django:django ./docker/local/django/celery/flower/start.sh /start-celeryflower.sh
 
-RUN sed -i 's/\r$//g' /entrypoint.sh /start.sh /start-celeryworker.sh /start-celerybeat.sh \
-    /start-celeryflower.sh && \
+# Convert Windows line endings to Unix line endings and make scripts executable
+RUN dos2unix /entrypoint.sh /start.sh /start-celeryworker.sh /start-celerybeat.sh /start-celeryflower.sh && \
     chmod +x /entrypoint.sh /start.sh /start-celeryworker.sh /start-celerybeat.sh /start-celeryflower.sh
 
 COPY --chown=django:django . ${APP_HOME}
