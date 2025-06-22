@@ -2,7 +2,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from os import path, getenv
 from loguru import logger
-from datetime import timedelta
+from datetime import timedelta, date
 import cloudinary
 
 
@@ -156,6 +156,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # location of auth model for our users
 
 AUTH_USER_MODEL = "user_auth.User"
+
+DEFAULT_BIRTH_DATE = date(1990, 1, 1)
+DEFAULT_DATE = date.today(2000, 1, 1)
+DEFAULT_EXPIRY_DATE = date(2027, 1, 1)
+DEFAULT_COUNTRY = "KE"
+DEFAULT_PHONE_NUMBER = "+254700000000"
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
