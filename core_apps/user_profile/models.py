@@ -85,7 +85,7 @@ class Profile(TimeStampedModel):
         _("Phone Number"),
         default=settings.DEFAULT_PHONE_NUMBER,
         max_length=20,
-        default_region=settings.DEFAULT_COUNTRY
+        region=settings.DEFAULT_COUNTRY
     )
     address = models.CharField(
         _("Address"), max_length=255, default="Unknown Address"
@@ -114,7 +114,7 @@ class Profile(TimeStampedModel):
         max_length=20,
         blank=True,
         null=True,
-        default_region=settings.DEFAULT_COUNTRY
+        region=settings.DEFAULT_COUNTRY
     )
     photo = CloudinaryField(
         "photo",
